@@ -26,6 +26,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramToken = urlParams.get("token");
+    const paramUser = urlParams.get("user");
+
+    if (paramToken && paramUser) {
+      try {
+        const parsedUser = JSON.parse(decodeURIComponent(paramUser));
+        localStorage.setItem("terratwin_token", paramToken);
+        localStorage.setItem("terratwin_user", JSON.stringify(parsedUser));
+        setToken(paramToken);
+        setUser(parsedUser);
+        setLoading(false);
+        return;
+      } catch (err) {
+        console.error("Failed to parse user from query param", err);
+      }
+    }
+
     // Check for stored token and user
     const storedToken = localStorage.getItem("terratwin_token");
     const storedUser = localStorage.getItem("terratwin_user");

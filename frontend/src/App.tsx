@@ -128,6 +128,33 @@ const AppContent: React.FC = () => {
     localStorage.setItem("terratwin_theme", theme);
   }, [theme]);
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const screenshot = urlParams.get("screenshot");
+    if (screenshot) {
+      if (screenshot === "landing") {
+        setShowLanding(true);
+      } else {
+        setShowLanding(false);
+        if (["dashboard", "twin", "camera", "commute", "bot", "story", "privacy", "leaderboard"].includes(screenshot)) {
+          setActiveTab(screenshot as any);
+        }
+      }
+
+      const scrollTarget = urlParams.get("scroll");
+      if (scrollTarget) {
+        setTimeout(() => {
+          const element = document.getElementById(scrollTarget);
+          if (element) {
+            element.scrollIntoView({ block: "center" });
+          } else {
+            window.scrollTo(0, document.body.scrollHeight);
+          }
+        }, 1500);
+      }
+    }
+  }, [activeTab]);
+
   // Local component refresh states
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 

@@ -39,7 +39,7 @@ const WhatIfSandbox: React.FC = () => {
   const totalSavings = commuteSavings + tempSavings;
 
   return (
-    <div className="border-t border-white/5 pt-5 mt-5">
+    <div id="what-if-sandbox" className="border-t border-white/5 pt-5 mt-5">
       <div className="flex items-center gap-1.5 text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-3">
         <Activity className="w-3.5 h-3.5 text-ecoTeal" /> What-If Scenario Sandbox
       </div>
