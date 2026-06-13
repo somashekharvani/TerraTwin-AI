@@ -1,0 +1,62 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique
+  password        String
+  name            String
+  monthlyGoal     Float     @default(200)
+  walletAddress   String?
+  createdAt       DateTime  @default(now())
+  carbonEntries   CarbonEntry[]
+}
+
+model CarbonEntry {
+  id              String    @id @default(cuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category        String    // transport, energy, food, shopping, waste
+  type            String    // car, electricity, beef, etc
+  value           Float
+  unit            String    // km, kWh, kg
+  carbonEmitted   Float
+  source          String    // manual, bill_ocr, food_camera, geolocation, iot
+  automatic       Boolean   @default(false)
+  metadata        String?
+  createdAt       DateTime  @default(now())
+
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model Location {
+  id              String    @id @default(cuid())
+  userId          String
+  latitude        Float
+  longitude       Float
+  createdAt       DateTime  @default(now())
+}
+
+model SmartDevice {
+  id              String    @id @default(cuid())
+  userId          String
+  deviceId        String
+  deviceName      String
+  powerUsage      Float
+  timestamp       DateTime  @default(now())
+}
+
+model TokenTransaction {
+  id              String    @id @default(cuid())
+  userId          String
+  action          String
+  amount          Int
+  transactionHash String
+  createdAt       DateTime  @default(now())
+}
